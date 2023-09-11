@@ -30,13 +30,33 @@ namespace Bayonetta3_bin_tool
                 binFile.Save(Filepath.Insert(Filepath.LastIndexOf('.'), "_new"));
                 return;
             }
-            else
+            else if(File.Exists(args[0]))
             {
                 var binFile = new Bin(args[0]);
                 File.WriteAllLines(args[0] + ".txt", binFile.GetStrings());
             }
+            else if (Directory.Exists(args[0]))
+            {
+                Console.WriteLine("Extracting: "+ args[0]);
+                var path =Path.GetFullPath(args[0]);
+                Directory.SetCurrentDirectory(path);
+                if (File.Exists("AllStrings.txt"))
+                {
+                    File.Delete("AllStrings.txt");
+                }
 
+                foreach (var FilePath in Directory.GetFiles(path,"*.bin",SearchOption.AllDirectories))
+                {
+                    Console.WriteLine("\tExtracting: " + FilePath);
 
+                    var binFile = new Bin(FilePath);
+
+                    File.AppendAllText("AllStrings.txt", "[PATH]"+ FilePath.Substring(path.Length)+ "[PATH]\r\n");
+                    File.AppendAllLines("AllStrings.txt", binFile.GetStrings());
+
+                }
+
+            }
         }
 
 

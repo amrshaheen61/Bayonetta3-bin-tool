@@ -92,9 +92,8 @@ namespace Bayonetta3_bin_tool.Core
             foreach (var value in NamesBlock.Values)
                 value.ReadString(Stream);
 
-            if (NamesBlock[Stream.GetUIntValue()].Str != "archive_MES")
-                throw new Exception("Invalid file:!= \"archive_MES\"");
-
+            
+            Stream.GetUIntValue();//File Name
 
             bool has_groupid = Stream.GetIntValue() == 1;
             Stream.Skip(12);//unko
